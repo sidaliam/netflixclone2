@@ -1,0 +1,53 @@
+.series-page {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .content {
+    
+    max-width: 1200px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .series-list {
+
+    list-style-type: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+
+  }
+  .navinfo{
+    text-decoration: none;
+    color: white;
+  }
+  .series-item {
+    background-color: black;
+    color: blanchedalmond;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+  }
+  
+  .series-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .series-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+  
+  .error {
+    color: red;
+    font-weight: bold;
+  }
+  
