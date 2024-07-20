@@ -87,5 +87,32 @@
         }
       }
     }
+
+    .mobile-logout {
+      display: none; // Caché par défaut
+      background-color: red;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 12px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darkred;
+      }
+    }
+  }
+}
+
+// Media queries pour la version mobile
+@media (max-width: 768px) {
+  .navbar .container .right {
+    display: none; // Masquer .right en version mobile
+  }
+
+  .navbar .container .mobile-logout {
+    display: block; // Afficher le bouton de déconnexion en version mobile
   }
 }

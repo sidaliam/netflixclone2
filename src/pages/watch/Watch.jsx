@@ -55,14 +55,14 @@ export default function Watch() {
             kind: "captions",
             label: "English",
             srclang: "en",
-            src: movie.subtitleEn,
+            src: movie.subtitles, // URL des sous-titres en anglais
             default: true,
           },
           {
             kind: "captions",
             label: "French",
             srclang: "fr",
-            src: movie.subtitleFr,
+            src: "/path/to/your/subtitles/french.vtt", // Remplacer par l'URL correcte pour les sous-titres français
           },
         ],
       });
@@ -74,6 +74,16 @@ export default function Watch() {
       } else {
         console.error("httpSourceSelector plugin is not available.");
       }
+
+      player.ready(function() {
+        const tracks = player.textTracks();
+        for (let i = 0; i < tracks.length; i++) {
+          const track = tracks[i];
+          if (track.kind === "captions" || track.kind === "subtitles") {
+            track.mode = "showing"; // Affiche les sous-titres
+          }
+        }
+      });
 
       return () => {
         if (player) {
@@ -105,17 +115,16 @@ export default function Watch() {
               <label style={{color:"white"}}> Qualité :</label>
               <br />
               <div className="quality-controls">
-                <button onClick={() => handleQualityChange(movie.video720)}>720p</button>
-                <button onClick={() => handleQualityChange(movie.video1080)}>1080p</button>
+                <button onClick={() => handleQualityChange(movie.video)}>720p</button>
+                <button onClick={() => handleQualityChange(movie.video)}>1080p</button>
               </div>
               <br />
               <label style={{color:"white"}} >Subtitles:</label>
               <br />
               <div className="caption-controls">
-               
                 <select>
-                  <option value={movie.subtitleEn}>English</option>
-                  <option value={movie.subtitleFr}>French</option>
+                  <option value={movie.subtitles}>English</option>
+                  <option value={movie.subtitles}>French</option>
                 </select>
               </div>
             </div>
