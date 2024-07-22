@@ -5,7 +5,6 @@ import videojs from "video.js";
 import "video.js/dist/video-js.css";
 import "videojs-http-source-selector";
 import "./watch.scss";
-import ReactPlayer from 'react-player';
 
 export default function Watch() {
   const location = useLocation();
@@ -30,7 +29,7 @@ export default function Watch() {
   }, []);
 
   useEffect(() => {
-    if (movie && videoRef.current && !isMobile) {
+    if (movie && videoRef.current) {
       const player = videojs(videoRef.current, {
         controls: true,
         autoplay: false,
@@ -50,38 +49,39 @@ export default function Watch() {
             res: 1080,
           },
         ],
-        tracks: [
-          {
-            kind: "captions",
-            label: "English",
-            srclang: "en",
-            src: movie.subtitles, // URL des sous-titres en anglais
-            default: true,
-          },
-          {
-            kind: "captions",
-            label: "French",
-            srclang: "fr",
-            src: "/path/to/your/subtitles/french.vtt", // Remplacer par l'URL correcte pour les sous-titres français
-          },
-        ],
       });
 
-      if (player.httpSourceSelector) {
-        player.httpSourceSelector({
-          default: 'auto'
-        });
-      } else {
-        console.error("httpSourceSelector plugin is not available.");
-      }
-
+      // Ajouter des sous-titres de manière dynamique
       player.ready(function() {
+        const trackEn = document.createElement("track");
+        trackEn.kind = "captions";
+        trackEn.label = "English";
+        trackEn.srclang = "en";
+        trackEn.src = movie.subtitles;
+        trackEn.default = true;
+        videoRef.current.appendChild(trackEn);
+
+        const trackFr = document.createElement("track");
+        trackFr.kind = "captions";
+        trackFr.label = "French";
+        trackFr.srclang = "fr";
+        trackFr.src = "/path/to/your/subtitles/french.vtt"; // Remplacer par l'URL correcte
+        videoRef.current.appendChild(trackFr);
+
         const tracks = player.textTracks();
         for (let i = 0; i < tracks.length; i++) {
           const track = tracks[i];
           if (track.kind === "captions" || track.kind === "subtitles") {
             track.mode = "showing"; // Affiche les sous-titres
           }
+        }
+
+        if (player.httpSourceSelector) {
+          player.httpSourceSelector({
+            default: 'auto'
+          });
+        } else {
+          console.error("httpSourceSelector plugin is not available.");
         }
       });
 
@@ -102,43 +102,14 @@ export default function Watch() {
         </div>
       </Link>
       {movie ? (
-        isMobile ? (
-          <div>
-            <ReactPlayer
-              className="react-player"
-              url={currentQuality}
-              controls
-              width="100%"
-              height="100%"
-            />
-            <div className="controls-overlay">
-              <label style={{color:"white"}}> Qualité :</label>
-              <br />
-              <div className="quality-controls">
-                <button onClick={() => handleQualityChange(movie.video)}>720p</button>
-                <button onClick={() => handleQualityChange(movie.video)}>1080p</button>
-              </div>
-              <br />
-              <label style={{color:"white"}} >Subtitles:</label>
-              <br />
-              <div className="caption-controls">
-                <select>
-                  <option value={movie.subtitles}>English</option>
-                  <option value={movie.subtitles}>French</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div data-vjs-player>
-            <video
-              ref={videoRef}
-              className="video-js vjs-default-skin"
-              controls
-              preload="auto"
-            />
-          </div>
-        )
+        <div data-vjs-player>
+          <video
+            ref={videoRef}
+            className="video-js vjs-default-skin"
+            controls
+            preload="auto"
+          />
+        </div>
       ) : (
         <p>Movie not found</p>
       )}
