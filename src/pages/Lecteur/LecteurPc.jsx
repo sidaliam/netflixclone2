@@ -94,7 +94,7 @@ export default function LecteurPC() {
         <div
           data-vjs-player
           className="video-container"
-          style={{ backgroundImage: `url(${movie.img})` }}
+          style={{ backgroundImage: `url(${movie.img}) center/cover` }}
         >
           <video
             ref={videoRef}
@@ -102,8 +102,7 @@ export default function LecteurPC() {
             controls
             preload="auto"
           />
-          <br />
-          <br />
+
           {movie.desc && (
             <div className="descriptionmovie">
               <h5>{movie.desc}</h5>

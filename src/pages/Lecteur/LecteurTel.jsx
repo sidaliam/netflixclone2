@@ -113,8 +113,7 @@ import {
               controls
               preload="auto"
             />
-            <br />
-            <br />
+
             {movie.desc && (
               <div className="descriptionmovie">
                 <h5>{movie.desc}</h5>
